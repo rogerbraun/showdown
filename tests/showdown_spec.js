@@ -3,20 +3,24 @@ var showdown = require("../src/showdown.js");
 // Some helpers
 var assert_equal = function(a, b) {
   if(a != b){
-    return { message: ("Expected:\n" + a + "\nGot:\n" + b + "\n"), result: false};
+    return { message: ("Expected:\n" + a + "\nGot:\n" + b), result: false};
   } else { 
     return {result: true};
   }
 }
 
+var indent = function(text) {
+  return "  " + text.replace(/\n/g, "\n  ");
+}
+
 var it = function(name, code) {  
   var res = code();
   if(res.result){
-    console.log("Passed: " + name );
+    console.log("\033[1;32mPassed: " + name + "\033[0m");
     return true;
   } else {
-    console.log("Failed: " + name + "\n");
-    console.log(res.message);
+    console.log("\033[1;31mFailed: " + name + "\n\033[0m");
+    console.log(indent(res.message));
     return false;
   }
 }
@@ -40,3 +44,16 @@ it("should parse Github-style code blocks", function() {
   return assert_equal(html, expected);
 });
 
+it("should make header tags", function() {
+  var text = "# Header";
+  var html = converter.makeHtml(text);
+  var expected = "<h1 id=\"header\">Header</h1>";
+  return assert_equal(html, expected);
+});
+
+it("should make header tags from underlined text", function() {
+  var text = "Header\n======";
+  var html = converter.makeHtml(text);
+  var expected = "<h1 id=\"header\">Header</h1>";
+  return assert_equal(html, expected);
+});
