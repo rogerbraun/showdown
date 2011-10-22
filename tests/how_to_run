@@ -1,0 +1,3 @@
+Just execute the JS.
+I used node:
+  node showdown_spec.js

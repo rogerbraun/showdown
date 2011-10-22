@@ -1,3 +1,7 @@
+META-NOTE -- I am not Corey
+===========================
+
+I (Roger Braun) forked this and added some functionality and tests for my more or less private use. Anyways, here's the real README:
 
 NOTE -- Showdown on GitHub
 ==========================
