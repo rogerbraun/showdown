@@ -3,7 +3,7 @@ var showdown = require("../src/showdown.js");
 // Some helpers
 var assert_equal = function(a, b) {
   if(a != b){
-    throw { message: ("Expected:\n" + a + "\nGot:\n" + b), result: false};
+    throw { message: ("Expected:\n\"" + a + "\"\nGot:\n\"" + b + "\""), result: false};
   } else { 
     return {result: true};
   }
@@ -38,8 +38,14 @@ var converter = new showdown.Showdown.converter();
 // The tests
 
 it("should make paragraphs out of simple texts", function() {
-  var html = converter.makeHtml("Hallo");
+  var text = "Hallo";
+  var html = converter.makeHtml(text);
   var expected = "<p>Hallo</p>"
+  assert_equal(html, expected);
+
+  text = "Hello\n\nHow are you?";
+  html = converter.makeHtml(text);
+  expected = "<p>Hello</p>\n\n<p>How are you?</p>"
   assert_equal(html, expected);
 });
 
@@ -76,3 +82,20 @@ it("should make second level header tags from text underlined with underscores",
 
   assert_equal(html, expected);
 });
+
+it("should do bulleted lists", function() {
+  var text = "* Write a JS Markdown interpreter\n* ????\n* Profit!!";
+  var html = converter.makeHtml(text);
+  var expected = "<ul>\n<li>Write a JS Markdown interpreter</li>\n<li>????</li>\n<li>Profit!!</li>\n</ul>";
+
+  assert_equal(html, expected);
+});
+
+it("should do numbered lists", function() {
+  var text = "1. Write a JS Markdown interpreter\n2. ????\n3. Profit!!";
+  var html = converter.makeHtml(text);
+  var expected = "<ol>\n<li>Write a JS Markdown interpreter</li>\n<li>????</li>\n<li>Profit!!</li>\n</ol>";
+
+  assert_equal(html, expected);
+});
+
