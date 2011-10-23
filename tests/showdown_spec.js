@@ -1,6 +1,13 @@
 var showdown = require("../src/showdown.js");
+var fs = require("fs");
+var path = require ("path");
 
 // Some helpers
+
+String.prototype.trim = function () {
+  return this.replace(/^\s*(\S*(\s+\S+)*)\s*$/, "$1");
+};
+
 var assert_equal = function(a, b) {
   if(a === b){
     return {result: true};
@@ -99,3 +106,27 @@ it("should do numbered lists", function() {
   assert_equal(html, expected);
 });
 
+it("should pass the Markdown test suite", function() {
+
+  var dir = fs.readdirSync("./tests/md_testsuite/");
+  dir.sort();
+  basenames = []
+
+  for(i = 0; i < dir.length; i += 2){
+    basenames.push(path.basename(dir[i],".html"));
+  }
+
+  for(i = 0; i < basenames.length; i++){
+    var basename = "./tests/md_testsuite/" + basenames[i]
+    var text = fs.readFileSync(basename + ".text", "utf-8");
+    var html = converter.makeHtml(text);
+    var expected = fs.readFileSync(basename + ".html", "utf-8");
+
+    // remove newlines
+    html = html.replace(/\n/g, "");
+    expected = expected.replace(/\n/g, "");
+    assert_equal(html, expected);
+
+  }  
+
+});
