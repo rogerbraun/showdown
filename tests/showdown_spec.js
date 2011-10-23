@@ -2,10 +2,10 @@ var showdown = require("../src/showdown.js");
 
 // Some helpers
 var assert_equal = function(a, b) {
-  if(a != b){
-    throw { message: ("Expected:\n\"" + a + "\"\nGot:\n\"" + b + "\""), result: false};
-  } else { 
+  if(a === b){
     return {result: true};
+  } else { 
+    throw { message: ("Expected:\n\"" + a + "\"\nGot:\n\"" + b + "\""), result: false};
   }
 }
 
